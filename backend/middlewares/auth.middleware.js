@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
 
+const JWT_SECRET = process.env.SECRET_KEY || "job-portal-dev-secret";
 
- const isAuthenticated = (req, res, next) => {
+const isAuthenticated = (req, res, next) => {
   try {
     const token = req.cookies.token;
 
@@ -12,7 +13,7 @@ import jwt from "jsonwebtoken";
       });
     }
 
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = jwt.verify(token, JWT_SECRET);
     req.userId = decoded.userId;
     next();
   } catch (error) {

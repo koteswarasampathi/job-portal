@@ -3,46 +3,41 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Home() {
-
     const { user } = useAuth();
 
     return (
-        <div className="home-page">
+        <div className="hp-page">
 
-            <div className="home-container">
+            {/* HERO SECTION */}
+            <section className="hp-hero">
 
-                <section className="hero-section">
+                <div className="hp-hero-container">
 
-                    <div className="hero-content">
+                    {/* LEFT SIDE */}
+                    <div className="hp-hero-left">
 
-                        <span className="hero-badge">
-                            🚀 Find your next opportunity
-                        </span>
+                        <div className="hp-badge">
+                            🚀 FIND YOUR NEXT OPPORTUNITY
+                        </div>
 
                         <h1>
-                            Find Your
-                            <span> Dream Job</span>
+                            Everything you need
+                            <br />
+                            to <span>find the right job.</span>
                         </h1>
 
                         <p>
-                            Discover job opportunities, connect with
-                            companies, and take the next step in your career.
+                            We make your job search easier, faster and more effective.
+                            Discover opportunities that match your skills and career goals.
                         </p>
 
-                        <div className="hero-buttons">
-
-                            <Link
-                                to="/jobs"
-                                className="hero-primary-button"
-                            >
-                                Browse Jobs
+                        <div className="hp-buttons">
+                            <Link to="/jobs" className="hp-primary-btn">
+                                Find Jobs →
                             </Link>
 
                             {!user && (
-                                <Link
-                                    to="/register"
-                                    className="hero-secondary-button"
-                                >
+                                <Link to="/register" className="hp-secondary-btn">
                                     Create Account
                                 </Link>
                             )}
@@ -54,130 +49,154 @@ function Home() {
                                             ? "/recruiter/dashboard"
                                             : "/dashboard"
                                     }
-                                    className="hero-secondary-button"
+                                    className="hp-secondary-btn"
                                 >
-                                    Go to Dashboard
+                                    Dashboard
                                 </Link>
                             )}
-
                         </div>
 
-                    </div>
-
-
-                    <div className="hero-visual">
-
-                        <div className="hero-card">
-
-                            <div className="hero-card-icon">
-                                💼
+                        <div className="hp-stats">
+                            <div>
+                                <strong>10K+</strong>
+                                <span>Active Jobs</span>
                             </div>
-
-                            <h3>
-                                Thousands of Opportunities
-                            </h3>
-
-                            <p>
-                                Find jobs that match your skills and
-                                career goals.
-                            </p>
-
-                        </div>
-
-
-                        <div className="hero-floating-card">
-
-                            <span>✓</span>
 
                             <div>
-                                <strong>
-                                    Easy Applications
-                                </strong>
-
-                                <small>
-                                    Apply in just a few clicks
-                                </small>
+                                <strong>5K+</strong>
+                                <span>Companies</span>
                             </div>
 
+                            <div>
+                                <strong>25K+</strong>
+                                <span>Job Seekers</span>
+                            </div>
+
+                            <div>
+                                <strong>95%</strong>
+                                <span>Success Rate</span>
+                            </div>
                         </div>
 
                     </div>
 
-                </section>
 
+                    {/* RIGHT SIDE */}
+                    <div className="hp-hero-right">
 
-                <section className="features-section">
+                        <div className="hp-main-card">
 
-                    <div className="feature">
+                            <div className="hp-card-top">
+                                <span className="hp-card-icon">💼</span>
 
-                        <div className="feature-icon">
-                            🔎
+                                <div>
+                                    <small>READY TO START?</small>
+                                    <h2>Your next opportunity is waiting.</h2>
+                                </div>
+                            </div>
+
+                            <p>
+                                Join thousands of professionals and companies
+                                building their future with JobPortal.
+                            </p>
+
+                            <Link to="/jobs" className="hp-card-button">
+                                Explore Jobs →
+                            </Link>
+
                         </div>
 
-                        <h3>
-                            Find Jobs
-                        </h3>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            {/* FEATURES */}
+            <section className="hp-features">
+
+                <div className="hp-section-heading">
+                    <small>WHY JOBPORTAL</small>
+                    <h2>Everything you need to find the right job.</h2>
+                    <p>
+                        Simple tools for job seekers and recruiters.
+                    </p>
+                </div>
+
+                <div className="hp-feature-grid">
+
+                    <div className="hp-feature-card">
+                        <div className="hp-feature-icon">🔎</div>
+                        <h3>Find the right jobs</h3>
+                        <p>
+                            Search thousands of jobs using keywords,
+                            location and job preferences.
+                        </p>
+                        <Link to="/jobs">Explore Jobs →</Link>
+                    </div>
+
+                    <div className="hp-feature-card">
+                        <div className="hp-feature-icon">⚡</div>
+                        <h3>Apply in seconds</h3>
+                        <p>
+                            Create your profile once and apply to
+                            opportunities quickly and easily.
+                        </p>
+                        <Link to="/jobs">Start Applying →</Link>
+                    </div>
+
+                    <div className="hp-feature-card">
+                        <div className="hp-feature-icon">📊</div>
+                        <h3>Track applications</h3>
+                        <p>
+                            Keep track of your applications and know
+                            exactly where you stand.
+                        </p>
+                        <Link to="/applications">View Dashboard →</Link>
+                    </div>
+
+                    <div className="hp-feature-card">
+                        <div className="hp-feature-icon">🏢</div>
+                        <h3>Hire great talent</h3>
+                        <p>
+                            Recruiters can post jobs and connect with
+                            talented candidates.
+                        </p>
+                        <Link to="/recruiter/dashboard">Start Hiring →</Link>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            {/* CTA */}
+            <section className="hp-cta">
+
+                <div className="hp-cta-container">
+
+                    <div>
+                        <small>READY TO START?</small>
+
+                        <h2>
+                            Your next opportunity
+                            <br />
+                            is waiting for you.
+                        </h2>
 
                         <p>
-                            Search jobs by title, skills and location.
+                            Join JobPortal and take the next step in your career.
                         </p>
-
                     </div>
 
+                    <Link to="/jobs" className="hp-cta-button">
+                        Get Started →
+                    </Link>
 
-                    <div className="feature">
+                </div>
 
-                        <div className="feature-icon">
-                            📝
-                        </div>
-
-                        <h3>
-                            Easy Apply
-                        </h3>
-
-                        <p>
-                            Apply to your favorite jobs quickly.
-                        </p>
-
-                    </div>
-
-
-                    <div className="feature">
-
-                        <div className="feature-icon">
-                            📊
-                        </div>
-
-                        <h3>
-                            Track Applications
-                        </h3>
-
-                        <p>
-                            Monitor your application status easily.
-                        </p>
-
-                    </div>
-
-
-                    <div className="feature">
-
-                        <div className="feature-icon">
-                            🏢
-                        </div>
-
-                        <h3>
-                            Hire Talent
-                        </h3>
-
-                        <p>
-                            Recruiters can post jobs and find candidates.
-                        </p>
-
-                    </div>
-
-                </section>
-
-            </div>
+            </section>
 
         </div>
     );

@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
+const JWT_SECRET = process.env.SECRET_KEY || "job-portal-dev-secret";
 
 export const register = async (req, res) => {
     try {
@@ -78,7 +79,7 @@ export const login = async (req, res) => {
             {
                 userId: user._id
             },
-            process.env.SECRET_KEY,
+            JWT_SECRET,
             {
                 expiresIn: "1d"
             }
@@ -159,6 +160,10 @@ export const updateProfile = async (req, res) => {
         } = req.body;
 
         const user = await User.findById(req.userId);
+
+        if (!user.profile) {
+            user.profile = {};
+        }
 
         if (!user) {
             return res.status(404).json({
@@ -255,8 +260,7 @@ export const uploadProfilePhoto = async (req, res) => {
             });
         }
 
-        user.profile.profilePhoto =
-            req.file.filename;
+        user.profile.profilePhoto = `/uploads/${req.file.filename}`;
 
         await user.save();
 

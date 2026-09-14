@@ -3,7 +3,6 @@ import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
 function Profile() {
-
     const { user, getUser } = useAuth();
 
     const [fullname, setFullname] = useState("");
@@ -14,6 +13,8 @@ function Profile() {
     const [resume, setResume] = useState(null);
     const [profilePhoto, setProfilePhoto] = useState(null);
 
+    const [photoPreview, setPhotoPreview] = useState("");
+
     const [loading, setLoading] = useState(false);
     const [uploadingResume, setUploadingResume] = useState(false);
     const [uploadingPhoto, setUploadingPhoto] = useState(false);
@@ -21,12 +22,12 @@ function Profile() {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
 
+    // Backend URL
+    const BACKEND_URL = "http://localhost:9000";
 
     // Load user information
     useEffect(() => {
-
         if (user) {
-
             setFullname(user.fullname || "");
             setPhoneNumber(user.phoneNumber || "");
             setBio(user.profile?.bio || "");
@@ -35,17 +36,41 @@ function Profile() {
                 user.profile?.skills?.join(", ") || ""
             );
         }
-
     }, [user]);
 
+    // Create profile photo URL
+    const getPhotoUrl = (photo) => {
+        if (!photo) {
+            return "";
+        }
+
+        if (photo.startsWith("http")) {
+            return photo;
+        }
+
+        return `${BACKEND_URL}${photo.startsWith("/") ? photo : `/${photo}`}`;
+    };
+
+    // Select profile photo
+    const handlePhotoSelect = (e) => {
+        const file = e.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        setProfilePhoto(file);
+
+        // Preview selected image
+        const previewUrl = URL.createObjectURL(file);
+        setPhotoPreview(previewUrl);
+    };
 
     // Update profile
     const handleUpdateProfile = async (e) => {
-
         e.preventDefault();
 
         try {
-
             setLoading(true);
             setMessage("");
             setError("");
@@ -70,33 +95,26 @@ function Profile() {
                 "Profile updated successfully!"
             );
 
-            // Get latest user data
             await getUser();
 
         } catch (error) {
-
             setError(
                 error.response?.data?.message ||
                 "Failed to update profile."
             );
-
         } finally {
-
             setLoading(false);
         }
     };
 
-
     // Upload resume
     const handleResumeUpload = async () => {
-
         if (!resume) {
             setError("Please select a resume first.");
             return;
         }
 
         try {
-
             setUploadingResume(true);
             setMessage("");
             setError("");
@@ -120,29 +138,23 @@ function Profile() {
             await getUser();
 
         } catch (error) {
-
             setError(
                 error.response?.data?.message ||
                 "Failed to upload resume."
             );
-
         } finally {
-
             setUploadingResume(false);
         }
     };
 
-
     // Upload profile photo
     const handlePhotoUpload = async () => {
-
         if (!profilePhoto) {
             setError("Please select a profile photo first.");
             return;
         }
 
         try {
-
             setUploadingPhoto(true);
             setMessage("");
             setError("");
@@ -165,22 +177,20 @@ function Profile() {
             );
 
             setProfilePhoto(null);
+            setPhotoPreview("");
 
+            // Get updated user including new photo
             await getUser();
 
         } catch (error) {
-
             setError(
                 error.response?.data?.message ||
                 "Failed to upload profile photo."
             );
-
         } finally {
-
             setUploadingPhoto(false);
         }
     };
-
 
     return (
         <div className="profile-page">
@@ -192,7 +202,6 @@ function Profile() {
                 <p className="profile-subtitle">
                     Manage your personal information and documents.
                 </p>
-
 
                 {/* Messages */}
 
@@ -208,9 +217,7 @@ function Profile() {
                     </div>
                 )}
 
-
                 <div className="profile-grid">
-
 
                     {/* Profile Information */}
 
@@ -222,9 +229,7 @@ function Profile() {
 
                             <div className="profile-field">
 
-                                <label>
-                                    Full Name
-                                </label>
+                                <label>Full Name</label>
 
                                 <input
                                     type="text"
@@ -237,12 +242,9 @@ function Profile() {
 
                             </div>
 
-
                             <div className="profile-field">
 
-                                <label>
-                                    Email
-                                </label>
+                                <label>Email</label>
 
                                 <input
                                     type="email"
@@ -256,12 +258,9 @@ function Profile() {
 
                             </div>
 
-
                             <div className="profile-field">
 
-                                <label>
-                                    Phone Number
-                                </label>
+                                <label>Phone Number</label>
 
                                 <input
                                     type="text"
@@ -274,12 +273,9 @@ function Profile() {
 
                             </div>
 
-
                             <div className="profile-field">
 
-                                <label>
-                                    Bio
-                                </label>
+                                <label>Bio</label>
 
                                 <textarea
                                     value={bio}
@@ -292,12 +288,9 @@ function Profile() {
 
                             </div>
 
-
                             <div className="profile-field">
 
-                                <label>
-                                    Skills
-                                </label>
+                                <label>Skills</label>
 
                                 <input
                                     type="text"
@@ -313,7 +306,6 @@ function Profile() {
                                 </small>
 
                             </div>
-
 
                             <button
                                 type="submit"
@@ -333,42 +325,36 @@ function Profile() {
                     {/* Profile Photo */}
 
                     <div className="profile-card">
-
                         <h2>Profile Photo</h2>
 
                         <div className="profile-photo-section">
 
-                            {user?.profile?.profilePhoto ? (
-
+                            {photoPreview ? (
                                 <img
-                                    src={user.profile.profilePhoto}
+                                    src={photoPreview}
+                                    alt="Selected profile"
+                                    className="profile-image"
+                                />
+                            ) : user?.profile?.profilePhoto ? (
+                                <img
+                                    src={getPhotoUrl(user.profile.profilePhoto)}
                                     alt="Profile"
                                     className="profile-image"
                                 />
-
                             ) : (
-
                                 <div className="profile-placeholder">
                                     👤
                                 </div>
-
                             )}
 
-                            <p>
-                                Upload a professional profile photo.
-                            </p>
-
+                            <p>Upload a professional profile photo.</p>
                         </div>
-
 
                         <input
                             type="file"
                             accept=".jpg,.jpeg,.png"
-                            onChange={(e) =>
-                                setProfilePhoto(e.target.files[0])
-                            }
+                            onChange={handlePhotoSelect}
                         />
-
 
                         {profilePhoto && (
                             <p className="selected-file">
@@ -376,20 +362,15 @@ function Profile() {
                             </p>
                         )}
 
-
                         <button
                             type="button"
                             className="upload-button"
                             onClick={handlePhotoUpload}
                             disabled={uploadingPhoto}
                         >
-                            {uploadingPhoto
-                                ? "Uploading..."
-                                : "Upload Photo"}
+                            {uploadingPhoto ? "Uploading..." : "Upload Photo"}
                         </button>
-
                     </div>
-
 
                     {/* Resume */}
 
@@ -420,7 +401,6 @@ function Profile() {
 
                         </div>
 
-
                         <input
                             type="file"
                             accept=".pdf,.jpg,.jpeg,.png"
@@ -429,13 +409,11 @@ function Profile() {
                             }
                         />
 
-
                         {resume && (
                             <p className="selected-file">
                                 Selected: {resume.name}
                             </p>
                         )}
-
 
                         <button
                             type="button"
@@ -459,6 +437,7 @@ function Profile() {
 
                         <div className="account-row">
                             <span>Role</span>
+
                             <strong>
                                 {user?.role || "Student"}
                             </strong>
@@ -466,6 +445,7 @@ function Profile() {
 
                         <div className="account-row">
                             <span>Account Email</span>
+
                             <strong>
                                 {user?.email}
                             </strong>

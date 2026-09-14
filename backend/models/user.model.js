@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
         resumeOriginalName: {
             type: String,
         },
-        profilePicture: {
+        profilePhoto: {
             type: String,
         }
     }
