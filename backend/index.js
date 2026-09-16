@@ -18,14 +18,21 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-    origin: ["http://localhost:5173",
-        "https://job-portal-x61w.onrender.com"
-    ],
-    credentials: true
-})
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://job-portal-jet-eight-77.vercel.app"
+];
 
-);
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
 app.use(cookieParser());
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
