@@ -2,6 +2,18 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
+const BACKEND_URL = "https://job-portal-x61w.onrender.com";
+
+const getPhotoUrl = (photo) => {
+    if (!photo) return "";
+
+    if (photo.startsWith("http")) {
+        return photo;
+    }
+
+    return `${BACKEND_URL}${photo.startsWith("/") ? photo : `/${photo}`}`;
+};
+
 function Profile() {
     const { user, getUser } = useAuth();
 
