@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+import cloudinary from "../utils/cloudinary.js";
+import fs from "fs";
 
 const JWT_SECRET = process.env.SECRET_KEY || "job-portal-dev-secret";
 
@@ -260,27 +262,30 @@ export const uploadProfilePhoto = async (req, res) => {
             });
         }
 
-        user.profile.profilePhoto = `/uploads/${req.file.filename}`;
+        // Upload image to Cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "job-portal/profile-photos"
+        });
+
+        fs.unlinkSync(req.file.path);
+
+        // Save Cloudinary URL in MongoDB
+        user.profile.profilePhoto = result.secure_url;
 
         await user.save();
 
         return res.status(200).json({
             success: true,
             message: "Profile photo uploaded successfully",
-            profilePhoto: req.file.filename
+            profilePhoto: result.secure_url
         });
 
     } catch (error) {
+        console.error("PROFILE PHOTO UPLOAD ERROR:", error);
+
         return res.status(500).json({
             success: false,
             message: error.message
         });
     }
 };
-
-
-
-
-
-
-
