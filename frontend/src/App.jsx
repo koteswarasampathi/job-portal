@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
+
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -15,6 +16,8 @@ import Applicants from "./pages/Applicants";
 import Profile from "./pages/Profile";
 import EditJob from "./pages/EditJob";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
 
@@ -24,6 +27,10 @@ function App() {
             <Navbar />
 
             <Routes>
+
+                {/* =========================
+                    PUBLIC ROUTES
+                ========================== */}
 
                 <Route
                     path="/"
@@ -35,7 +42,10 @@ function App() {
                     element={<Jobs />}
                 />
 
-                <Route path="/jobs/:id" element={<JobDetails />} />
+                <Route
+                    path="/jobs/:id"
+                    element={<JobDetails />}
+                />
 
                 <Route
                     path="/login"
@@ -47,42 +57,49 @@ function App() {
                     element={<Register />}
                 />
 
-                <Route
-                    path="/dashboard"
-                    element={<Dashboard />}
-                />
 
-                <Route
-                    path="/applications"
-                    element={<MyApplications />}
-                />
+                {/* =========================
+                    PROTECTED ROUTES
+                ========================== */}
 
+                <Route element={<ProtectedRoute />}>
 
-                <Route
-                    path="/recruiter/dashboard"
-                    element={<RecruiterDashboard />}
-                />
+                    <Route
+                        path="/dashboard"
+                        element={<Dashboard />}
+                    />
 
-                <Route
-                    path="/recruiter/create-job"
-                    element={<CreateJob />}
-                />
+                    <Route
+                        path="/applications"
+                        element={<MyApplications />}
+                    />
 
-                <Route
-                    path="/recruiter/edit-job/:id"
-                    element={<EditJob />}
-                />
+                    <Route
+                        path="/recruiter/dashboard"
+                        element={<RecruiterDashboard />}
+                    />
 
+                    <Route
+                        path="/recruiter/create-job"
+                        element={<CreateJob />}
+                    />
 
-                <Route
-                    path="/recruiter/applicants/:jobId"
-                    element={<Applicants />}
-                />
+                    <Route
+                        path="/recruiter/edit-job/:id"
+                        element={<EditJob />}
+                    />
 
-                <Route
-                    path="/profile"
-                    element={<Profile />}
-                />
+                    <Route
+                        path="/recruiter/applicants/:jobId"
+                        element={<Applicants />}
+                    />
+
+                    <Route
+                        path="/profile"
+                        element={<Profile />}
+                    />
+
+                </Route>
 
             </Routes>
 
