@@ -1,4 +1,6 @@
 import Company from "../models/company.model.js";
+import cloudinary from "../utils/cloudinary.js";
+import fs from "fs";
 
 export const registerCompany = async (req, res) => {
     try {
@@ -28,11 +30,29 @@ export const registerCompany = async (req, res) => {
             });
         }
 
+        let logoUrl = "";
+
+        // Upload logo to Cloudinary
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(
+                req.file.path,
+                {
+                    folder: "job-portal/company-logos"
+                }
+            );
+
+            logoUrl = result.secure_url;
+
+            // Delete temporary local file
+            fs.unlinkSync(req.file.path);
+        }
+
         const company = await Company.create({
             name,
             description,
             website,
             location,
+            logo: logoUrl,
             userId: req.userId
         });
 
@@ -43,6 +63,8 @@ export const registerCompany = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("COMPANY REGISTER ERROR:", error);
+
         return res.status(500).json({
             success: false,
             message: error.message

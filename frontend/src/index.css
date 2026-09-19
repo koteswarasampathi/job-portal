@@ -3339,3 +3339,86 @@ textarea::placeholder {
     font-size: 14px;
 }
 
+.add-company-page {
+    min-height: calc(100vh - 80px);
+    background: #f5f7fb;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 20px;
+}
+
+.add-company-card {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.add-company-card h2 {
+    margin-bottom: 25px;
+    color: #1f2937;
+    font-size: 28px;
+}
+
+.company-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.company-form input,
+.company-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.company-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.company-form input:focus,
+.company-form textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.logo-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.company-form input[type="file"] {
+    padding: 10px;
+    background: #f9fafb;
+}
+
+.register-company-btn {
+    padding: 13px;
+    border: none;
+    border-radius: 7px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.register-company-btn:hover {
+    background: #1d4ed8;
+}
+
+.company-message {
+    margin-top: 20px;
+    padding: 12px;
+    background: #ecfdf5;
+    color: #047857;
+    border-radius: 7px;
+}

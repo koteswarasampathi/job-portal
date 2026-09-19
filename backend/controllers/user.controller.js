@@ -1,10 +1,15 @@
+import "dotenv/config";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import cloudinary from "../utils/cloudinary.js";
 import fs from "fs";
 
-const JWT_SECRET = process.env.SECRET_KEY || "job-portal-dev-secret";
+const JWT_SECRET = process.env.SECRET_KEY;
+
+if (!JWT_SECRET) {
+    throw new Error("SECRET_KEY is missing in environment variables");
+}
 
 export const register = async (req, res) => {
     try {

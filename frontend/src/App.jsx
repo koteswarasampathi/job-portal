@@ -15,6 +15,7 @@ import CreateJob from "./pages/CreateJob";
 import Applicants from "./pages/Applicants";
 import Profile from "./pages/Profile";
 import EditJob from "./pages/EditJob";
+import AddCompany from "./pages/AddCompany";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -83,6 +84,8 @@ function App() {
                         path="/recruiter/create-job"
                         element={<CreateJob />}
                     />
+
+                    <Route path="/recruiter/add-company" element={<AddCompany />} />
 
                     <Route
                         path="/recruiter/edit-job/:id"
