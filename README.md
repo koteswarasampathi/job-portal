@@ -43,7 +43,7 @@ https://github.com/koteswarasampathi/job-portal
 
 ### 👥 Applicants Page
 
-![Applicants Page](screenshots/applicants.png)
+![applicants Page](screenshots/applicants.png)
 
 ---
 
