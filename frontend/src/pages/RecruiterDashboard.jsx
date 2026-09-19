@@ -8,6 +8,7 @@ function RecruiterDashboard() {
     const { user } = useAuth();
 
     const [jobs, setJobs] = useState([]);
+    const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -40,22 +41,37 @@ function RecruiterDashboard() {
         }
     };
 
-    const getMyJobs = async () => {
+
+    const getDashboardData = async () => {
 
         try {
 
             setLoading(true);
             setError("");
 
-            const response = await API.get("/job/recruiter/my-jobs");
+            const jobsResponse = await API.get(
+                "/job/recruiter/my-jobs"
+            );
 
-            setJobs(response.data.jobs || []);
+            const companiesResponse = await API.get(
+                "/company"
+            );
+
+            setJobs(
+                jobsResponse.data.jobs || []
+            );
+
+            setCompanies(
+                companiesResponse.data.companies || []
+            );
 
         } catch (error) {
 
+            console.error("Dashboard error:", error);
+
             setError(
                 error.response?.data?.message ||
-                "Failed to load your jobs."
+                "Failed to load dashboard data."
             );
 
         } finally {
@@ -64,10 +80,10 @@ function RecruiterDashboard() {
         }
     };
 
-    useEffect(() => {
-        getMyJobs();
-    }, []);
 
+    useEffect(() => {
+        getDashboardData();
+    }, []);
 
     return (
         <div className="recruiter-dashboard-page">
@@ -88,12 +104,23 @@ function RecruiterDashboard() {
                         </p>
                     </div>
 
-                    <Link
-                        to="/recruiter/create-job"
-                        className="create-job-button"
-                    >
-                        + Create Job
-                    </Link>
+                    <div className="dashboard-actions">
+
+                        <Link
+                            to="/recruiter/add-company"
+                            className="add-company-button"
+                        >
+                            + Add Company
+                        </Link>
+
+                        <Link
+                            to="/recruiter/create-job"
+                            className="create-job-button"
+                        >
+                            + Create Job
+                        </Link>
+
+                    </div>
 
                 </div>
 
@@ -135,6 +162,116 @@ function RecruiterDashboard() {
                                 </p>
 
                             </div>
+
+                        </div>
+
+                        <div className="companies-section">
+
+                            <div className="companies-section-header">
+
+                                <h2>
+                                    My Companies
+                                </h2>
+
+                                <Link
+                                    to="/recruiter/add-company"
+                                    className="add-company-small-button"
+                                >
+                                    + Add Company
+                                </Link>
+
+                            </div>
+
+
+                            {companies.length === 0 ? (
+
+                                <div className="no-companies">
+
+                                    <h3>
+                                        No Companies Added Yet
+                                    </h3>
+
+                                    <p>
+                                        Add a company before creating job opportunities.
+                                    </p>
+
+                                    <Link
+                                        to="/recruiter/add-company"
+                                        className="add-company-button"
+                                    >
+                                        Add Company
+                                    </Link>
+
+                                </div>
+
+                            ) : (
+
+                                <div className="companies-grid">
+
+                                    {companies.map((company) => (
+
+                                        <div
+                                            className="company-card"
+                                            key={company._id}
+                                        >
+
+                                            <div className="company-logo-container">
+
+                                                {company.logo ? (
+
+                                                    <img
+                                                        src={company.logo}
+                                                        alt={`${company.name} logo`}
+                                                        className="company-logo"
+                                                    />
+
+                                                ) : (
+
+                                                    <div className="company-logo-placeholder">
+                                                        🏢
+                                                    </div>
+
+                                                )}
+
+                                            </div>
+
+
+                                            <div className="company-info">
+
+                                                <h3>
+                                                    {company.name}
+                                                </h3>
+
+                                                <p>
+                                                    📍 {company.location || "Location not specified"}
+                                                </p>
+
+                                                {company.description && (
+                                                    <p className="company-description">
+                                                        {company.description}
+                                                    </p>
+                                                )}
+
+                                                {company.website && (
+                                                    <a
+                                                        href={company.website}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="company-website"
+                                                    >
+                                                        🌐 Visit Website
+                                                    </a>
+                                                )}
+
+                                            </div>
+
+                                        </div>
+
+                                    ))}
+
+                                </div>
+
+                            )}
 
                         </div>
 

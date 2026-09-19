@@ -74,7 +74,12 @@ export const registerCompany = async (req, res) => {
 
 export const getCompanies = async (req, res) => {
     try {
-        const companies = await Company.find();
+
+        const companies = await Company.find({
+            userId: req.userId
+        }).sort({
+            createdAt: -1
+        });
 
         return res.status(200).json({
             success: true,
@@ -82,13 +87,15 @@ export const getCompanies = async (req, res) => {
         });
 
     } catch (error) {
+
+        console.error("GET COMPANIES ERROR:", error);
+
         return res.status(500).json({
             success: false,
             message: error.message
         });
     }
 };
-
 export const getCompanyById = async (req, res) => {
     try {
         const company = await Company.findById(req.params.id);
